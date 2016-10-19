@@ -9,11 +9,10 @@ module API
     prefix :api
     mount UserVehicles
     add_swagger_documentation(
-        format: :json,
         info: {title: "车辆管理以及违章推送接口",
                description: "杨宇 yangy@meixing.com"},
         :api_version => "v1",
-        hide_documentation_path: true,
+        # hide_documentation_path: true,
         hide_format: true
     )
   end

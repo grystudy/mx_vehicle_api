@@ -1,5 +1,5 @@
 if Rails.env.development?
-  ActiveSupport::Dependencies.explicitly_unloadable_constants << 'MxVehicle::API'
+  # ActiveSupport::Dependencies.explicitly_unloadable_constants << 'API::API'
 
   api_files = Dir[Rails.root.join('app', 'api', '**', '*.rb')]
   api_reloader = ActiveSupport::FileUpdateChecker.new(api_files) do

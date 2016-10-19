@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+gem 'hashie-forbidden_attributes'
 gem 'grape'
 gem 'grape-swagger', '~> 0.10.2'
 gem 'grape-swagger-rails', '~> 0.1.0'
