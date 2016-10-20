@@ -8,6 +8,7 @@ module API
     format :json
     prefix :api
     mount UserVehicles
+    mount UserDevices
     add_swagger_documentation(
         info: {title: "车辆管理以及违章推送接口",
                description: "杨宇 yangy@meixing.com"},

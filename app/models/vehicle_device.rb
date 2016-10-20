@@ -1,0 +1,2 @@
+class VehicleDevice < ApplicationRecord
+end

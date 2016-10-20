@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  vehicle: 1
+  device: MyString
+  status: 1
+  lw: 2016-10-20 17:11:26
+  lp: 2016-10-20 17:11:26
+
+two:
+  vehicle: 1
+  device: MyString
+  status: 1
+  lw: 2016-10-20 17:11:26
+  lp: 2016-10-20 17:11:26
