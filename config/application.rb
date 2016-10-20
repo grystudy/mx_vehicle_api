@@ -14,6 +14,6 @@ module MxVehicleApi
     config.paths.add File.join('app', 'api'), glob: File.join('**', '*.rb')
     # config.paths.add File.join('app', 'api'), glob:'*.rb'
     config.autoload_paths += Dir[Rails.root.join('app', 'api', '*')]
-    config.autoload_paths += Dir[Rails.root.join('app', 'api', 'entities','*')]
+    #config.autoload_paths += Dir[Rails.root.join('app', 'api', 'entities','*')]
   end
 end
