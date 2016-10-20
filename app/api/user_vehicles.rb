@@ -13,18 +13,18 @@ module API
       end
 
       desc '创建车辆' do
-        params API::Entities::Vehicle.documentation
+        params API::Entities::Vehicle.documentation.except(:id)
       end
       post do
-        new_ = UserVehicle.create! params
+        new_ = UserVehicle.create params
         present id: new_.id
       end
 
       desc '更新车辆' do
-        params API::Entities::Vehicle.documentation
+        params API::Entities::Vehicle.documentation.except(:user)
       end
-      put ":id" do
-        item_ = UserVehicle.find_by_id(params[:id])
+      put do
+        item_ = UserVehicle.find(params[:id])
         item_.update params
       end
 
@@ -32,7 +32,7 @@ module API
       params do
         requires :id, type: Integer, desc: '车辆Id', documentation: { example: '1'}
       end
-      delete ':id' do
+      delete do
         UserVehicle.destroy(params[:id])
       end
     end

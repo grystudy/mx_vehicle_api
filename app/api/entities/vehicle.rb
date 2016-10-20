@@ -1,6 +1,7 @@
 module API
   module Entities
     class Vehicle < Grape::Entity
+      expose :id, documentation: {type: Integer, desc: 'Id', required: true}
       expose :user, documentation: {type: Integer, desc: '用户Id', required: true}
       expose :plate, documentation: {type: String, desc: '车牌号', required: true}
       expose :frame, documentation: {type: String, desc: '车架号'}
