@@ -1,4 +1,4 @@
-Dir["#{Rails.root}/app/api/entities/*.rb"].each { |file| require file }
+# Dir["#{Rails.root}/app/api/entities/*.rb"].each { |file| require file }
 module API
   class UserDevices < Grape::API
     include API::Defaults
