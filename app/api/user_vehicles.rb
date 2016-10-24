@@ -1,7 +1,7 @@
 Dir["#{Rails.root}/app/api/entities/*.rb"].each { |file| require file }
 module API
   class UserVehicles < Grape::API
-    include API::Defaults
+    # include API::Defaults
     namespace :vehicle do
       desc "获取用户的车辆列表"
       params do
