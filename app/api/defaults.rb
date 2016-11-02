@@ -2,7 +2,6 @@ module API
   module Defaults
     # if you're using Grape outside of Rails, you'll have to use Module#included hook
     extend ActiveSupport::Concern
-
     included do
       # # global handler for simple not found case
       # rescue_from ActiveRecord::RecordNotFound do |e|
@@ -17,12 +16,16 @@ module API
 
       # global handler for simple not found case
       rescue_from ActiveRecord::RecordNotFound do |e|
-        error!({message: e.message, with: Entities::ApiError}, 404)
+        error!({message: e.message}, 404)
+      end
+
+      rescue_from Grape::Exceptions::ValidationErrors do |e|
+        error!({message: e.message}, 400)
       end
 
       # global exception handler, used for error notifications
       rescue_from :all do |e|
-        error!({message: "Internal server error: #{e}", with: Entities::ApiError}, 500)
+        error!({message: "Internal server error: #{e}"}, 500)
       end
 
 
