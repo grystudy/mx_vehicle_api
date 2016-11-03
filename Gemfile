@@ -1,4 +1,8 @@
 source 'https://rubygems.org'
+gem 'httparty', '~> 0.13.7'
+gem 'igetui-ruby', require: 'igetui'
+gem 'sidekiq'
+gem 'sidetiq'
 gem 'hashie-forbidden_attributes'
 gem 'grape'
 gem 'grape-swagger', '~> 0.23.0'
