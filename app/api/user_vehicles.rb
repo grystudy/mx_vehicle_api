@@ -1,7 +1,8 @@
 Dir["#{Rails.root}/app/api/entities/*.rb"].each { |file| require file }
+require "defaults.rb"
 module API
   class UserVehicles < Grape::API
-    include API::Defaults
+    include Defaults
     namespace :vehicle do
       desc "获取用户的车辆列表" do
         failure [{code: 200, message: 'OK'},
@@ -22,7 +23,7 @@ module API
                  {code: 400, message: "参数不合法"},
                  {code: 404, message: "url错误"},
                  {code: 500, message: "其他未知错误"}]
-        params API::Entities::Vehicle.documentation.except(:id)
+        params Entities::Vehicle.documentation.except(:id)
       end
       post do
         new_ = UserVehicle.create params
@@ -34,7 +35,7 @@ module API
                  {code: 400, message: "参数不合法"},
                  {code: 404, message: "找不到该条数据"},
                  {code: 500, message: "其他未知错误"}]
-        params API::Entities::Vehicle.documentation.except(:user)
+        params ::API::Entities::Vehicle.documentation.except(:user)
       end
       put do
         item_ = UserVehicle.find(params[:id])
@@ -46,7 +47,7 @@ module API
                  {code: 400, message: "参数不合法"},
                  {code: 404, message: "找不到该条数据"},
                  {code: 500, message: "其他未知错误"}]
-        params API::Entities::Vehicle.documentation.except(:user)
+        params ::API::Entities::Vehicle.documentation.except(:user)
       end
       params do
         requires :id, type: Integer, desc: '车辆Id', documentation: {example: '1'}

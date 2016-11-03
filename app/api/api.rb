@@ -1,5 +1,7 @@
 require "grape-swagger"
-Dir["#{Rails.root}/app/api/*.rb"].each {|file| require file}
+# Dir["#{Rails.root}/app/api/*.rb"].each {|file| require file}
+require 'user_vehicles.rb'
+require 'user_devices.rb'
 module API
   class API < Grape::API
     version 'v1', using: :path

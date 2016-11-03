@@ -1,7 +1,7 @@
 # Dir["#{Rails.root}/app/api/entities/*.rb"].each { |file| require file }
 module API
   class UserDevices < Grape::API
-    # include API::Defaults
+    include Defaults
     namespace :device do
       desc "开启或关闭推送" do
         failure [{code: 200, message: 'OK'},
