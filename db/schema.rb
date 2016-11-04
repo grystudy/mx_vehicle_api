@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161020091126) do
+ActiveRecord::Schema.define(version: 20161104070109) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,11 +36,11 @@ ActiveRecord::Schema.define(version: 20161020091126) do
   create_table "vehicle_devices", force: :cascade do |t|
     t.integer  "vehicle"
     t.string   "device"
-    t.integer  "status"
-    t.time     "lw"
-    t.time     "lp"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "lq"
+    t.datetime "lw"
+    t.datetime "lp"
   end
 
 end
