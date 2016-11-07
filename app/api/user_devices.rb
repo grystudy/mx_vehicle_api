@@ -13,10 +13,13 @@ module API
         requires :user, type: Integer, desc: '用户Id'
         requires :device, type: String, desc: '设备Id'
         requires :status, type: Integer, values: [0, 1], desc: '0:关 1：开'
+        requires :dtype, type: Integer, values: [0, 1], default: 0, desc: '设备类型 0:安卓 1：ios'
+        optional :appkey, type: String, desc: 'appkey'
       end
       get "switch" do
         devices = UserDevice.where(user: params[:user], device: params[:device]).all
         dp = declared params
+        dp.delete :appkey
         if devices.size > 0
           devices.each do |item_|
             item_.update dp
@@ -36,6 +39,7 @@ module API
       params do
         requires :vehicle, type: Array[Integer], desc: '多个车辆Id用逗号分隔', coerce_with: ->(val) { val.split(',').map(&:to_i) }, documentation: {example: '1,2,3'}
         requires :device, type: String, desc: '设备Id'
+        optional :appkey, type: String, desc: 'appkey'
       end
       put "update" do
         vehicles = params[:vehicle]
@@ -52,6 +56,7 @@ module API
             results = []
             dp = declared(params)
             dp.delete(:vehicle)
+            dp.delete :appkey
             vehicles.each do |v_|
               results << dp.merge({vehicle: v_}.merge(time_hash))
             end
