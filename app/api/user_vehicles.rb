@@ -16,7 +16,8 @@ module API
       end
       get do
         vehicles = UserVehicle.where(user: params[:user]).all
-        present :all, vehicles, with: Entities::Vehicle
+        # present :all, vehicles, with: Entities::Vehicle
+        present :all, vehicles
       end
 
       desc '创建车辆' do
