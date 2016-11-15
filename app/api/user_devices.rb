@@ -10,7 +10,7 @@ module API
                  {code: 500, message: "其他未知错误"}]
       end
       params do
-        requires :user, type: Integer, desc: '用户Id'
+        requires :user, type: String, desc: '用户Id'
         requires :device, type: String, desc: '设备Id'
         requires :status, type: Integer, values: [0, 1], desc: '0:关 1：开'
         requires :dtype, type: Integer, values: [0, 1], default: 0, desc: '设备类型 0:安卓 1：ios'

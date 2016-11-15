@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 20161107092745) do
   enable_extension "plpgsql"
 
   create_table "user_devices", force: :cascade do |t|
-    t.integer  "user"
+    t.string   "user"
     t.string   "device"
     t.integer  "status"
     t.datetime "created_at", null: false
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 20161107092745) do
   end
 
   create_table "user_vehicles", force: :cascade do |t|
-    t.integer  "user"
+    t.string   "user"
     t.string   "plate"
     t.string   "frame"
     t.string   "engine"

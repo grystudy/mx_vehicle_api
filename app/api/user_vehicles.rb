@@ -11,7 +11,7 @@ module API
                  {code: 500, message: "其他未知错误"}]
       end
       params do
-        requires :user, type: Integer, desc: '用户Id'
+        requires :user, type: String, desc: '用户Id'
         optional :appkey, type: String, desc: 'appkey'
       end
       get do
