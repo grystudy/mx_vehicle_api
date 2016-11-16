@@ -24,6 +24,7 @@ module API
         failure [{code: 201, message: 'OK'},
                  {code: 400, message: "参数不合法"},
                  {code: 404, message: "url错误"},
+                 {code: 409, message: "此用户创建过该车牌号的车辆"},
                  {code: 500, message: "其他未知错误"}]
       end
       params do
@@ -31,6 +32,10 @@ module API
         optional :appkey, type: String, desc: 'appkey'
       end
       post do
+        exist = UserVehicle.where(user: params[:user], plate: params[:plate])
+        if exist.size >0
+          error!({message: "此用户创建过该车牌号的车辆。", id: exist.take.id}, 409)
+        end
         params.delete :appkey
         new_ = UserVehicle.create params
         present id: new_.id
