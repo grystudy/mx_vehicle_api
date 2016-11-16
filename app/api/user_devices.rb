@@ -46,7 +46,7 @@ module API
         vehicle_exist_ids = UserVehicle.where(id: vehicles).all.map { |i_| i_.id }
         error!({message: "找不到车辆记录"}, 404) if vehicle_exist_ids.size == 0
         devices = VehicleDevice.where(vehicle: vehicle_exist_ids, device: params[:device]).all
-        time_hash = {lq: Time.now}
+        time_hash = VehicleDevice.get_queried_now_hash
         if devices.size > 0
           devices.each do |item_|
             item_.update time_hash

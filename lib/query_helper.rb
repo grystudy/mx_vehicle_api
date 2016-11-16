@@ -1,19 +1,34 @@
 require 'getui_helper.rb'
 
 class QueryHelper
-  $s_lock = Mutex.new
-
   class << self
-    def loop chepai_, city_info
+    def loop
+      city_info = WeizhangInfo.new.get_city_info
+      unless city_info
+        return nil
+      end
+      city_info = city_info[:configs]
       bus = []
       max_count = 16
-      chepai_.each do |uuitem|
-        chepai = uuitem.plate
-        next unless chepai.size > 3
-        bus << {no: chepai, entity: uuitem}
-        if bus.size == max_count
-          QueryHelper.go(bus, city_info)
-          bus.clear
+      UserDevice.all.each do |ud|
+        next unless ud.status > 0
+        uv = UserVehicle.where(user: ud.user)
+        next if uv.size == 0
+        uv.each do |vehicle|
+          vd = nil
+          VehicleDevice.transaction do
+            hash_ = {vehicle: uv.id, device: ud.device}
+            devices = VehicleDevice.where(hash_).lock
+            vd = devices.size == 0 ? VehicleDevice.create(hash_) : devices.first
+          end
+          next unless vd.need_requery?
+          chepai = vehicle.plate
+          next unless chepai.size > 3
+          bus << {no: chepai, entity: vehicle, vd: vd}
+          if bus.size == max_count
+            QueryHelper.go(bus, city_info)
+            bus.clear
+          end
         end
       end
       QueryHelper.go(bus, city_info) unless bus.size == 0
@@ -25,6 +40,7 @@ class QueryHelper
       array_hash.each do |v|
         chepai = v[:no]
         uuitem = v[:entity]
+        vehicle_device = v[:vd]
         a_thread << Thread.new do
           pro = chepai[0]
           city = chepai[1]
@@ -38,10 +54,6 @@ class QueryHelper
           unless city_code
             Thread.exit
           end
-          $s_lock.synchronize do
-            # 判断是否需要查 根据时间
-
-          end
           get_param_func = lambda do |src_, num_|
             return nil unless src_
             return "" if num_ == 0
@@ -51,27 +63,22 @@ class QueryHelper
           begin
             response = WeizhangInfo.new(city_code, chepai, get_param_func.call(uuitem.engine, engine_num), get_param_func.call(uuitem.frame, frame_num)).get
           rescue Exception => ex_
-            p "exception !!!!!!!!!!!!!!!!!!!!!!  #{ex_.message}"
-            GetuiHelper.notificate '网络发生异常', ''
             sleep(30)
             retry
             Thread.exit
           end
           rspcode = response.weizhang_response_code
           if rspcode
-            p "#{chepai} #{rspcode}"
-            $s_lock.synchronize do
-              his_array = response.weizhang_histories
-              # 根据时间判断结果是否推送，然后更新时间
-              GetuiHelper.notificate 'save', "#{new_weizhang_item.size}个" if new_weizhang_item.size > 0
-              case rspcode
-                when 20000, 21000
-                  ftf = 1
-                when 50101
-                  ftf = 3
-                else
-                  ftf = 2
-              end
+            case rspcode
+              when 20000, 21000
+                his_array = response.weizhang_histories
+                if vehicle_device.need_push? his_array
+                  GetuiHelper.notificate vehicle_device.device,'违章', "您有新的违章！"
+                  cid_mine = '359ecfc2eedfef72081c29076faacc3b'
+                  GetuiHelper.notificate cid_mine,'违章', "您有新的违章！"
+                end
+              when 50101
+              else
             end
           end
         end
@@ -98,8 +105,8 @@ class WeizhangInfo
     @data_hash = nil
     car_info = @car_info
     return nil unless @car_info
-    api_id = 2
-    app_key = "c1a0dc80-3699-0134-fb7d-00163e081329"
+    api_id = 18
+    app_key = "08ecf6d0-89e4-0134-864d-0242c0a80007"
     timestamp = Time.now.getutc.to_i
     sign = Digest::MD5.hexdigest(api_id.to_s + car_info + timestamp.to_s + app_key)
     res = self.class.get("/traffic_violation/api/v1/query", {query: {car_info: car_info, api_id: api_id, sign: sign, timestamp: timestamp}})

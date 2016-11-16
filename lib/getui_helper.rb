@@ -2,13 +2,12 @@ class GetuiHelper
 	@app_id = 'JxYKP0yduy6jU3qvM4pWI3'
 	@app_key = 'D4CJtwxXOY62bILPy88o54'
 	@master_secret = '0rVbaeBnUC9OIzoptES0y1'
-	@cid_1 = '359ecfc2eedfef72081c29076faacc3b'
 	@pusher = IGeTui.pusher(@app_id, @app_key, @master_secret)
-	@client_1 = IGeTui::Client.new(@cid_1)
 	@s_lock = Mutex.new
 
 	class << self
-		def notificate title,text
+		def notificate client_id,title,text
+			client_1 = IGeTui::Client.new(client_id)
 			@s_lock.synchronize do
 				single_message = IGeTui::SingleMessage.new
 				template = IGeTui::NotificationTemplate.new
